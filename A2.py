@@ -85,6 +85,7 @@ def multipleDescent(
         previous_cost = current_cost
 
     print(current_cost)  # Print the final cost value after optimization completes
+    return theta
 
 def readCSV(filepath: str, normalize=False, standardize=False):
     dtypes = {
@@ -192,85 +193,155 @@ def main():
 
     # Training scenarios with headers
     print("Raw data training (subset):")
-    multipleDescent(
-        xtrain[
-            ["area", 
+    features =["area", 
             "bedrooms", 
             "bathrooms", 
             "stories", 
-            "parking"]], 
+            "parking"]
+    theta = multipleDescent(
+        xtrain[features], 
             ytrain, 
-            5, 
+            xtrain[features].shape[1], 
             learningRate=0.01, 
             paramPenalty=False)
+            
+    plotFeatures(features, theta)        
     
     print("Raw data training (all):")
-    multipleDescent(
+    features = [
+        "sq.ft",
+        "beds",
+        "baths",
+        "story",
+        "road",
+        "guest",
+        "base",
+        "heat",
+        "aircon",
+        "park",
+        "pref",
+        "furn"]
+    theta = multipleDescent(
         xtrain, 
         ytrain, 
         xtrain.shape[1], 
         learningRate=0.01, 
         paramPenalty=False)
+        
+    plotFeatures(features, theta)    
 
     print("Normalized subset:")
-    multipleDescent(
-        nxtrain[
-            ["area", 
-            "bedrooms", 
-            "bathrooms", 
-            "stories", 
-            "parking"]], 
-            nytrain, 
-            5, 
-            learningRate=0.02, 
-            paramPenalty=False)
+    features = [
+        "area", 
+        "bedrooms", 
+        "bathrooms", 
+        "stories", 
+        "parking"]
+    theta = multipleDescent(
+        nxtrain[features], 
+        nytrain, 
+        nxtrain[features].shape[1], 
+        learningRate=0.02, 
+        paramPenalty=False)
+            
+    plotFeatures(features, theta)           
 
     print("Standardized subset:")
-    multipleDescent(
-        sxtrain[
-            ["area", 
-            "bedrooms", 
-            "bathrooms", 
-            "stories", 
-            "parking"]], 
-            sytrain, 
-            5, 
-            learningRate=0.01, 
-            paramPenalty=False)
+    features = [
+        "area", 
+        "bedrooms", 
+        "bathrooms", 
+        "stories", 
+        "parking"]
+    theta = multipleDescent(
+        sxtrain[features], 
+        sytrain, 
+        sxtrain[features].shape[1], 
+        learningRate=0.01, 
+        paramPenalty=False)
+            
+    plotFeatures(features, theta)           
 
     print("Normalized (all columns):")
-    multipleDescent(
+    features = [
+        "sq.ft",
+        "beds",
+        "baths",
+        "story",
+        "road",
+        "guest",
+        "base",
+        "heat",
+        "aircon",
+        "park",
+        "pref",
+        "furn"]
+    theta = multipleDescent(
         nxtrain, 
         nytrain, 
         nxtrain.shape[1], 
         learningRate=0.01, 
         paramPenalty=False)
 
+    
+    plotFeatures(features, theta)
+
     print("Standardized (all columns):")
-    multipleDescent(
+    features = [
+        "sq.ft",
+        "beds",
+        "baths",
+        "story",
+        "road",
+        "guest",
+        "base",
+        "heat",
+        "aircon",
+        "park",
+        "pref",
+        "furn"]
+    theta = multipleDescent(
         sxtrain, 
         sytrain, 
         sxtrain.shape[1], 
         learningRate=0.01, 
         paramPenalty=False)
+        
+    plotFeatures(features, theta)    
 
     print("Training subset of variables (parameter penalty):")
-    multipleDescent(
-        nxtrain[
-        ["area", 
+    features = [
+        "area", 
         "bedrooms", 
         "bathrooms", 
         "stories", 
-        "parking"]], 
+        "parking"]
+    theta = multipleDescent(
+        nxtrain[features], 
         nytrain, 
-        5, 
+        nxtrain[features].shape[1], 
         learningRate=0.05, 
         paramPenalty=True, 
         lambda_reg=0.01, 
         tolerance=1e-5)
+        
+    plotFeatures(features, theta)    
 
     print("Training all variables (parameter penalty):")
-    multipleDescent(
+    features = [
+        "sq.ft",
+        "beds",
+        "baths",
+        "story",
+        "road",
+        "guest",
+        "base",
+        "heat",
+        "aircon",
+        "park",
+        "pref",
+        "furn"]
+    theta = multipleDescent(
         sxtrain, 
         sytrain, 
         sxtrain.shape[1], 
@@ -278,6 +349,8 @@ def main():
         paramPenalty=True, 
         lambda_reg=0.2, 
         tolerance=1e-5)
+        
+    plotFeatures(features, theta)        
 
 if __name__ == "__main__":
     main()
