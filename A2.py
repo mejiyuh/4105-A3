@@ -63,6 +63,7 @@ def multipleDescent(
 
     theta = np.zeros(numFeatures)
     previous_cost = float("-inf")
+    costs = []
 
     lambda_reg = lambda_reg if paramPenalty else None
 
@@ -74,6 +75,7 @@ def multipleDescent(
         theta -= learningRate * gradient
 
         current_cost = costFunction(X, y, theta, lambda_reg)
+        costs.append(current_cost)
 
         if np.isnan(current_cost) or np.isinf(current_cost):
             print("Cost function produced NaN or infinity value.")
@@ -85,6 +87,12 @@ def multipleDescent(
         previous_cost = current_cost
 
     print(current_cost)  # Print the final cost value after optimization completes
+    plt.plot(np.arange(0, it + 1), costs)
+    plt.title("Training/Validation Losses")
+    plt.xlabel("Epochs")
+    plt.ylabel("Mean Squared Error (MSE)")
+    plt.show()
+    
     return theta
 
 def readCSV(filepath: str, normalize=False, standardize=False):
